@@ -2,7 +2,6 @@ import sqlite3
 import helper
 
 class DBOperations():
-
     def __init__(self):
         self.conn = sqlite3.connect("weather.sqlite")
         print ("Database opened successfully")
@@ -37,18 +36,17 @@ class DBOperations():
             except sqlite3.IntegrityError:
                 return
 
-        self.conn.commit()
-        self.cur.close()
-        self.conn.close()   
+        self.conn.commit()        
 
     def purge_data(self):
         """Delete all data from table"""
         self.cur.execute("""delete from samples""")
         print("Deleted all data from database")
-
         self.conn.commit()
-        self.cur.close()
-        self.conn.close() 
+
+    def fetch_data():
+        """Return requested data for plotting"""
+        pass
         
     def get_data(data):
         """Receive data from the dictionary and turn convert it into a list."""
@@ -63,5 +61,9 @@ class DBOperations():
   
         return list
 
+    def __exit__(self):
+        self.cur.close()
+        self.conn.close()
+
 run = DBOperations()
-run.purge_data()        
+run.save_data()
