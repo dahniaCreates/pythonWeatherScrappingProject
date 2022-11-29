@@ -44,9 +44,15 @@ class DBOperations():
         print("Deleted all data from database")
         self.conn.commit()
 
-    def fetch_data():
+    def fetch_data(self):
         """Return requested data for plotting"""
-        pass
+        sql = """select * from samples"""
+
+        self.cur.execute(sql)
+
+        data = self.cur.fetchall()
+
+        return data
         
     def get_data(data):
         """Receive data from the dictionary and turn convert it into a list."""
@@ -66,4 +72,4 @@ class DBOperations():
         self.conn.close()
 
 run = DBOperations()
-run.save_data()
+run.fetch_data()
