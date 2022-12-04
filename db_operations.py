@@ -71,5 +71,5 @@ class DBOperations():
         self.cur.close()
         self.conn.close()
 
-# run = DBOperations()
-# run.save_data()
+#run = DBOperations()
+#run.save_data()
