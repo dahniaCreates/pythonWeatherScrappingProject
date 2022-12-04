@@ -13,7 +13,6 @@ Example:
   input = To year: 2022
   input = Enter a specific month and year: 8 2021
   output =
-
             ...
 """
 
@@ -24,7 +23,6 @@ Example:
 import matplotlib.pyplot as plt
 import db_operations
 import calendar
-# import numpy as np
 
 # if user provides a month and a year --> line plot (all days in that particular month and year)
 # if user only provides a year --> box plot (mean_temp, dates)
@@ -42,18 +40,36 @@ class PlotOperations():
     def line_plot(self):
         """Generates a line plot with all days mean temp of the prompted specific month and year."""
         month = input("Enter a number between 1 and 12 (Month): ")
+        if len(month) > 2:
+            raise ValueError("Month must be two digits or less in length.")
+        try:
+            int(month)
+        except ValueError:
+            print("Error: Month must be a number.")
+
         year = input("Enter a year: ")
+        if not len(year) == 4:
+            raise ValueError("Year must be four digits in length.")
+        try:
+            int(year)
+        except ValueError:
+            print("Error: Year must be a number.")
+        if(month == "" or year == ""):
+            raise Exception("A value must be entered to display weather data.")
 
         data = self.get_data_line(month, year)
 
-        # x-coordinate - date
+        # x-axis - date
         self.dates = data[0]
-        # y-coordinate - mean_temp
+        # y-axis - mean_temp
         self.mean_temp = data[1]
+
+        if not data[0]:
+            raise Exception("Data does not exist in our database. Please try again with other month and year. ")
 
         x = self.dates
         y = self.mean_temp
-        plt.plot(x, y, "g*-") # OR plt.plot(sales_years, sales_amounts)
+        plt.plot(x, y, "g*-")
         plt.xlabel("Day of Month")
         plt.ylabel("Mean Temp in Celsius")
         plt.title("Daily Temperatures of " + calendar.month_name[int(month)])
@@ -62,9 +78,27 @@ class PlotOperations():
     def box_plot(self):
         """Generates a box plot with all months with prompted year."""
         year_1 = input("Enter the starting year: ")
+
+        try:
+            int(year_1)
+        except ValueError:
+            print("Error: Year must be a number.")
+
         year_2 = input("Enter the ending year: ")
 
-        #Data for plotting (box plot)
+        try:
+            int(year_2)
+        except ValueError:
+            print("Error: Year must be a number.")
+
+        if len(year_1) != 4 or len(year_2) != 4:
+            raise ValueError("Year must be four digits in length.")
+
+        if(year_1 == "" or year_2 == ""):
+            raise Exception("A value must be entered to display weather data.")
+
+        if(int(year_1) > int(year_2)):
+            raise Exception("Starting year cannot be larger than ending year.")
 
         plt.boxplot(self.get_data_box(year_1, year_2))
         plt.xlabel("Months")
@@ -82,7 +116,7 @@ class PlotOperations():
         for d in self.data:
             date = d[1].split('/')
             month = date[1]
-            year = date[0]        
+            year = date[0]
 
             if month == str(input_month) and year == str(input_year):
                 day.append(date[2])
@@ -112,7 +146,11 @@ class PlotOperations():
             result.append(temp_list)
             current_month += 1
 
-        return result    
+        if not temp_list:
+            raise Exception("Data does not exist in our database. Please try again with other month and year. ")
+
+        return result
 
 run = PlotOperations()
-run.line_plot()
+#run.line_plot()
+run.box_plot()

@@ -15,7 +15,7 @@ class Helper():
         except ValueError:
             print("Error: Month must be a number.")
         myparser.user_year = input("Enter a year: ")
-        if not len(myparser.user_year) == 4 :
+        if not len(myparser.user_year) == 4:
             raise ValueError("Year must be four digits in length.")
         try:
             int(myparser.user_year)
@@ -38,6 +38,6 @@ class Helper():
         #prints out the formatted dictionary of dictionaries
         # for k, v in myparser.weather.items():
         #     result = f"{k}:{v}"
-        #     print(result)  
+        #     print(result)
 
         return myparser.weather
