@@ -36,7 +36,7 @@ class DBOperations():
             except sqlite3.IntegrityError:
                 return
 
-        self.conn.commit()        
+        self.conn.commit()
 
     def purge_data(self):
         """Delete all data from table"""
@@ -51,12 +51,12 @@ class DBOperations():
         self.cur.execute(sql)
 
         data = self.cur.fetchall()
-
+        print(data)
         return data
-        
+
     def get_data(data):
         """Receive data from the dictionary and turn convert it into a list."""
-        
+
         list = []
         for key in data:
             sublist = []
@@ -64,7 +64,7 @@ class DBOperations():
             for key2 in data[key]:
                 sublist.append(data[key][key2])
             list.append(sublist)
-  
+
         return list
 
     def __exit__(self):
