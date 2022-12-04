@@ -91,8 +91,6 @@ class PlotOperations():
         result.append(day)
         result.append(mean_temp)
 
-
-        print (result)
         return result
 
     def get_data_box(self, input_year_1: int, input_year_2: int):
@@ -117,4 +115,4 @@ class PlotOperations():
         return result    
 
 run = PlotOperations()
-run.box_plot()
+run.line_plot()
