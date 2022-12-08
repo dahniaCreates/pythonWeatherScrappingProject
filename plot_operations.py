@@ -41,21 +41,21 @@ class PlotOperations():
         """Generates a line plot with all days mean temp of the prompted specific month and year."""
         month = input("Enter a number between 1 and 12 (Month): ")
         if len(month) > 2:
-            raise ValueError("Month must be two digits or less in length.")
+            raise ValueError("❌ Month must be two digits or less in length.")
         try:
             int(month)
         except ValueError:
-            print("Error: Month must be a number.")
+            print("❌ Error: Month must be a number.")
 
         year = input("Enter a year: ")
         if not len(year) == 4:
-            raise ValueError("Year must be four digits in length.")
+            raise ValueError("❌ Year must be four digits in length.")
         try:
             int(year)
         except ValueError:
-            print("Error: Year must be a number.")
+            print("❌ Error: Year must be a number.")
         if(month == "" or year == ""):
-            raise Exception("A value must be entered to display weather data.")
+            raise Exception("❌ A value must be entered to display weather data.")
 
         data = self.get_data_line(month, year)
 
@@ -65,7 +65,7 @@ class PlotOperations():
         self.mean_temp = data[1]
 
         if not data[0]:
-            raise Exception("Data does not exist in our database. Please try again with other month and year. ")
+            raise Exception("❌ Data does not exist in our database. Please try again with other month and year. ")
 
         x = self.dates
         y = self.mean_temp
@@ -82,23 +82,23 @@ class PlotOperations():
         try:
             int(year_1)
         except ValueError:
-            print("Error: Year must be a number.")
+            print("❌ Error: Year must be a number.")
 
         year_2 = input("Enter the ending year: ")
 
         try:
             int(year_2)
         except ValueError:
-            print("Error: Year must be a number.")
+            print("❌ Error: Year must be a number.")
 
         if len(year_1) != 4 or len(year_2) != 4:
-            raise ValueError("Year must be four digits in length.")
+            raise ValueError("❌ Year must be four digits in length.")
 
         if(year_1 == "" or year_2 == ""):
-            raise Exception("A value must be entered to display weather data.")
+            raise Exception("❌ A value must be entered to display weather data.")
 
         if(int(year_1) > int(year_2)):
-            raise Exception("Starting year cannot be larger than ending year.")
+            raise Exception("❌ Starting year cannot be larger than ending year.")
 
         plt.boxplot(self.get_data_box(year_1, year_2))
         plt.xlabel("Months")
@@ -147,10 +147,10 @@ class PlotOperations():
             current_month += 1
 
         if not temp_list:
-            raise Exception("Data does not exist in our database. Please try again with other month and year. ")
+            raise Exception("❌ Data does not exist in our database. Please try again with other month and year. ")
 
         return result
 
-run = PlotOperations()
+#run = PlotOperations()
 #run.line_plot()
-run.box_plot()
+#run.box_plot()

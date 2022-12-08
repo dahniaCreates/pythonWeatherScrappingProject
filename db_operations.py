@@ -1,10 +1,11 @@
 import sqlite3
 import helper
+from datetime import datetime
 
 class DBOperations():
     def __init__(self):
         self.conn = sqlite3.connect("weather.sqlite")
-        print ("Database opened successfully")
+        print ("🔃 Accessing database ...")
 
         self.cur = self.conn.cursor()
 
@@ -24,7 +25,27 @@ class DBOperations():
 
     def save_data(self):
         """Save data to the database."""
-        data = DBOperations.get_data(helper.Helper.formatOutput())
+        data = DBOperations.get_data(helper.Helper.get_all_data())
+
+        sql = """insert into samples
+        (sample_date, location, min_temp, max_temp, avg_temp)
+        values(?, 'Winnipeg, MB', ?, ?, ?)"""
+
+        for d in data:
+            try:
+                self.cur.execute(sql, d)
+            except sqlite3.IntegrityError:
+                return
+
+        self.conn.commit()
+
+    def save_update_data(self):
+        """Saves updated data to the database."""
+        max_date = self.fetch_last_date()
+        if max_date != "":
+            for d in max_date:
+                latest_date = d.split('/')
+        data = DBOperations.get_data(helper.Helper().update_data((datetime(int(latest_date[0]), int(latest_date[1]), int(latest_date[2])))))
 
         sql = """insert into samples
         (sample_date, location, min_temp, max_temp, avg_temp)
@@ -41,7 +62,7 @@ class DBOperations():
     def purge_data(self):
         """Delete all data from table"""
         self.cur.execute("""delete from samples""")
-        print("Deleted all data from database")
+        print(" ➖ Deleted all data from database")
         self.conn.commit()
 
     def fetch_data(self):
@@ -51,8 +72,13 @@ class DBOperations():
         self.cur.execute(sql)
 
         data = self.cur.fetchall()
-        print(data)
         return data
+
+    def fetch_last_date(self):
+        """Fetches latest date stored in database"""
+        self.cur.execute("""SELECT MAX(sample_date) FROM samples""")
+        result = self.cur.fetchone()
+        return result
 
     def get_data(data):
         """Receive data from the dictionary and turn convert it into a list."""
@@ -72,4 +98,4 @@ class DBOperations():
         self.conn.close()
 
 #run = DBOperations()
-#run.save_data()
+#run.purge_data()

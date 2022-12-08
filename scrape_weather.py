@@ -100,8 +100,8 @@ class WeatherScraper(HTMLParser):
                             self.daily_temps_complete = self.daily_temps
                             self.daily_temps = {}
                             self.date = f"{self.user_year}/{self.user_month}/{self.day}"
-                            # self.complete_date = datetime.strptime(self.date, self.format).date()
+                            #self.complete_date = datetime.strptime(self.date, self.format).date()
                             self.complete_date = self.date
                             self.weather[self.complete_date] = self.daily_temps_complete
                     except ValueError:
-                        return False      
+                        return False
