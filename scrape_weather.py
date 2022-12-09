@@ -1,26 +1,18 @@
-"""This module demonstartes web scrapping from the Environment Canada website
-and returns a dictionary of dictionaries with the max, min and mean
-temperatures based on the user's response to the prompt.
-Example:
-  input = Enter a number between 1 and 12 (Month): 2
-  input = Enter a year: 1998
-
-  output =  1998-02-01:{'Max': -6.2, 'Min': -24.1, 'Mean': -15.2}
-            1998-02-02:{'Max': -17.9, 'Min': -28.0, 'Mean': -23.0}
-            ...
+"""This module contains all the functions needed to identify the tags and data
+for web scraping. It is assisted by the Helper class to populate
+a dictionary of dictionaries with the scraped weather data.
 """
 #Name: Dahnia Simon, Lok Yee Harriet Chiu, Kiet Lam
 #Course: Programming in Python - ADEV - 3005 (228331)
 #Date Due - Milestone 1: November 25, 2022
 #Term 5 - Final Project
+# pylint - 9.59
 
 from html.parser import HTMLParser
-from datetime import datetime
 
 class WeatherScraper(HTMLParser):
-    """The WeatherScraper class prompts a user for a month and a year and
-    then scraps the web for the max, min and mean temperatures from the user
-    specified date to October 1996."""
+    """The WeatherScraper class contains all methods needed to identify the
+    correct weather data to be scraped."""
     def __init__(self):
         """Initializes variables to be used through the class."""
         HTMLParser.__init__(self)
@@ -100,7 +92,6 @@ class WeatherScraper(HTMLParser):
                             self.daily_temps_complete = self.daily_temps
                             self.daily_temps = {}
                             self.date = f"{self.user_year}/{self.user_month}/{self.day}"
-                            #self.complete_date = datetime.strptime(self.date, self.format).date()
                             self.complete_date = self.date
                             self.weather[self.complete_date] = self.daily_temps_complete
                     except ValueError:

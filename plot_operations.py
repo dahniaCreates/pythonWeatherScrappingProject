@@ -1,13 +1,10 @@
-#Name: Dahnia Simon, Lok Yee Harriet Chiu, Kiet Lam
-#Course: Programming in Python - ADEV - 3005 (228331)
-#Date Due - Milestone 2: December 2, 2022
-#Term 5 - Final Project
-
 """This module retrieves specific data which is stored in our database (db_operations.py).
-It returns a basic boxplot of mean temperatures in a date range, displaying one box per month, so it shows all 12 months of the year on
-one plot.
-In addition, a line plot of a particular months mean temperature data, which shows the mean daily temp of a particular month and year.
-For example, it can display all the daily mean temperatures from January 2020, with the x axis being the day, and the y axis being temperature.
+It returns a basic boxplot of mean temperatures in a date range, displaying one box per month,
+so it shows all 12 months of the year on one plot.
+In addition, a line plot of a particular months mean temperature data, which shows
+the mean daily temp of a particular month and year. For example, it can display all the daily
+mean temperatures from January 2020, with the x axis being the day, and the y
+axis being temperature.
 Example:
   input = From year: 2000
   input = To year: 2022
@@ -15,27 +12,35 @@ Example:
   output =
             ...
 """
+#Name: Dahnia Simon, Lok Yee Harriet Chiu, Kiet Lam
+#Course: Programming in Python - ADEV - 3005 (228331)
+#Date Due - Milestone 2: December 2, 2022
+#Term 5 - Final Project
+# pylint - 9.78
 
 #pip install matplotlib
 # for types of plottting available: https://matplotlib.org/stable/gallery/index
 #for line styles: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
 
+import calendar
 import matplotlib.pyplot as plt
 import db_operations
-import calendar
+
 
 # if user provides a month and a year --> line plot (all days in that particular month and year)
 # if user only provides a year --> box plot (mean_temp, dates)
 
 class PlotOperations():
+    """The PlotOperations class fetches data from the database and returns either a box plot from a
+    year range of data or a line plot for a particular month."""
     def __init__(self):
-        """Init function."""
+        """Initializes variables to be used in the class."""
         self.dates = []
         self.mean_temp = []
         self.yearly_temps= []
 
-        db = db_operations.DBOperations()
-        self.data = db.fetch_data()
+        db_connection = db_operations.DBOperations()
+        self.data = db_connection.fetch_data()
 
     def line_plot(self):
         """Generates a line plot with all days mean temp of the prompted specific month and year."""
@@ -65,7 +70,8 @@ class PlotOperations():
         self.mean_temp = data[1]
 
         if not data[0]:
-            raise Exception("❌ Data does not exist in our database. Please try again with other month and year. ")
+            raise Exception("""❌ Data does not exist in our database.
+            Please try again with other month and year. """)
 
         x = self.dates
         y = self.mean_temp
@@ -94,10 +100,10 @@ class PlotOperations():
         if len(year_1) != 4 or len(year_2) != 4:
             raise ValueError("❌ Year must be four digits in length.")
 
-        if(year_1 == "" or year_2 == ""):
+        if year_1 == "" or year_2 == "":
             raise Exception("❌ A value must be entered to display weather data.")
 
-        if(int(year_1) > int(year_2)):
+        if int(year_1) > int(year_2):
             raise Exception("❌ Starting year cannot be larger than ending year.")
 
         plt.boxplot(self.get_data_box(year_1, year_2))
@@ -113,14 +119,14 @@ class PlotOperations():
 
         result = []
 
-        for d in self.data:
-            date = d[1].split('/')
+        for item in self.data:
+            date = item[1].split('/')
             month = date[1]
             year = date[0]
 
             if month == str(input_month) and year == str(input_year):
                 day.append(date[2])
-                mean_temp.append(d[5])
+                mean_temp.append(item[5])
 
         result.append(day)
         result.append(mean_temp)
@@ -134,23 +140,20 @@ class PlotOperations():
 
         for month in range(12):
             temp_list = []
-            for d in self.data:
-                date = d[1].split('/')
+            for item in self.data:
+                date = item[1].split('/')
                 month = date[1]
                 year = date[0]
 
                 if int(year) >= int(input_year_1) and int(year) <= int(input_year_2):
                     if int(month) == current_month:
-                        temp_list.append(d[5])
+                        temp_list.append(item[5])
 
             result.append(temp_list)
             current_month += 1
 
         if not temp_list:
-            raise Exception("❌ Data does not exist in our database. Please try again with other month and year. ")
+            raise Exception("""❌ Data does not exist in our database.
+                            Please try again with other month and year. """)
 
         return result
-
-#run = PlotOperations()
-#run.line_plot()
-#run.box_plot()
